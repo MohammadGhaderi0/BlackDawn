@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BlackDawn - Support Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
     <style>
         body {
             background-color: #121212;
@@ -18,19 +20,17 @@
             margin: 40px auto;
             text-align: center;
         }
-        /* Profile Image Styles */
         .profile-pic {
-            width: 120px; /* Adjust size as needed */
-            height: 120px; /* Adjust size as needed */
-            border-radius: 50%; /* Makes it a perfect circle */
-            object-fit: cover; /* Ensures image covers the area without distortion */
-            border: 4px solid #333; /* Optional: adds a border */
-            margin-bottom: 30px; /* Space below the image */
-            display: block; /* Ensures it takes its own line */
-            margin-left: auto; /* Centers the image */
-            margin-right: auto; /* Centers the image */
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #333;
+            margin-bottom: 30px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
-
         h1 {
             color: #ffffff;
             font-size: 2.5em;
@@ -89,7 +89,7 @@
         .copy-btn.copied {
             background-color: #28a745;
         }
-        /* QR Code Modal Styles */
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -104,31 +104,33 @@
             align-items: center;
         }
         .modal-content {
-            background-color: #1e1e1e;
-            padding: 30px;
-            border: 1px solid #333;
+            background-color: #fefefe; /* White background for QR code visibility */
+            padding: 20px;
+            border: 1px solid #888;
             border-radius: 10px;
             text-align: center;
             max-width: 90%;
-            width: 320px;
-            position: relative; /* For close button positioning */
+            width: 300px;
+            position: relative;
         }
-        .modal-content img {
-            max-width: 100%;
-            border: 5px solid #fff;
-            border-radius: 5px;
+        /* The container for the QR Code */
+        #qrcode {
+            padding: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .modal-address {
             font-family: 'Courier New', Courier, monospace;
-            color: #a0a0a0;
+            color: #333; /* Dark text on white background */
             word-break: break-all;
-            margin-top: 20px;
             font-size: 0.9em;
         }
         .close-btn {
             position: absolute;
-            top: 15px;
-            right: 25px;
+            top: 5px;
+            right: 15px;
             color: #aaa;
             font-size: 30px;
             font-weight: bold;
@@ -139,6 +141,7 @@
 <body>
 
     <div class="container">
+        
         <img src="profile.png" alt="Profile Photo" class="profile-pic">
 
         <h1>Support My Work</h1>
@@ -154,7 +157,6 @@
                 <button class="btn copy-btn" onclick="copyAddress('btc-addr', this)">Copy</button>
             </div>
         </div>
-
         <div class="wallet">
             <div class="wallet-info">
                 <div class="wallet-name">Ethereum / USDT (BEP20)</div>
@@ -165,7 +167,6 @@
                 <button class="btn copy-btn" onclick="copyAddress('eth-addr', this)">Copy</button>
             </div>
         </div>
-
         <div class="wallet">
             <div class="wallet-info">
                 <div class="wallet-name">USDT (TRC20)</div>
@@ -176,7 +177,6 @@
                 <button class="btn copy-btn" onclick="copyAddress('usdt-trc-addr', this)">Copy</button>
             </div>
         </div>
-
         <div class="wallet">
             <div class="wallet-info">
                 <div class="wallet-name">Solana (SOL)</div>
@@ -187,7 +187,6 @@
                 <button class="btn copy-btn" onclick="copyAddress('sol-addr', this)">Copy</button>
             </div>
         </div>
-
         <div class="wallet">
             <div class="wallet-info">
                 <div class="wallet-name">Ripple (XRP)</div>
@@ -198,7 +197,6 @@
                 <button class="btn copy-btn" onclick="copyAddress('xrp-addr', this)">Copy</button>
             </div>
         </div>
-
         <div class="wallet">
             <div class="wallet-info">
                 <div class="wallet-name">Toncoin (TON)</div>
@@ -209,7 +207,6 @@
                 <button class="btn copy-btn" onclick="copyAddress('ton-addr', this)">Copy</button>
             </div>
         </div>
-
         <div class="wallet">
             <div class="wallet-info">
                 <div class="wallet-name">Sui (SUI)</div>
@@ -226,21 +223,38 @@
     <div id="qrModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" id="closeBtn">&times;</span>
-            <img id="qrImage" src="" alt="QR Code" referrerpolicy="no-referrer">
+            <div id="qrcode"></div>
             <div id="modalAddress" class="modal-address"></div>
         </div>
     </div>
 
     <script>
+        // Elements for the modal
         const modal = document.getElementById('qrModal');
-        const qrImage = document.getElementById('qrImage');
+        const qrcodeContainer = document.getElementById('qrcode');
         const modalAddress = document.getElementById('modalAddress');
         const closeBtn = document.getElementById('closeBtn');
 
+        // This variable will hold the QRCode instance
+        let qrcode = null;
+
+        // UPDATED Function to show the modal and generate the QR code
         function showQrCode(address) {
-            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(address)}`;
-            qrImage.src = qrApiUrl;
             modalAddress.innerText = address;
+            
+            // Clear the previous QR code before generating a new one
+            qrcodeContainer.innerHTML = '';
+            
+            // Create a new QR Code
+            qrcode = new QRCode(qrcodeContainer, {
+                text: address,
+                width: 256,
+                height: 256,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            
             modal.style.display = 'flex';
         }
 
