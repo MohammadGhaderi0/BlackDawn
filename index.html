@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlackDawn - Support Page</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            width: 100%;
+            margin: 40px auto;
+            text-align: center;
+        }
+        /* Profile Image Styles */
+        .profile-pic {
+            width: 120px; /* Adjust size as needed */
+            height: 120px; /* Adjust size as needed */
+            border-radius: 50%; /* Makes it a perfect circle */
+            object-fit: cover; /* Ensures image covers the area without distortion */
+            border: 4px solid #333; /* Optional: adds a border */
+            margin-bottom: 30px; /* Space below the image */
+            display: block; /* Ensures it takes its own line */
+            margin-left: auto; /* Centers the image */
+            margin-right: auto; /* Centers the image */
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1.1em;
+            color: #a0a0a0;
+            margin-bottom: 40px;
+        }
+        .wallet {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-align: left;
+        }
+        .wallet-info {
+            flex-grow: 1;
+            margin-right: 15px;
+        }
+        .wallet-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #ffffff;
+        }
+        .wallet-address {
+            font-family: 'Courier New', Courier, monospace;
+            color: #888;
+            word-break: break-all;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+            white-space: nowrap;
+        }
+        .btn:hover {
+            background-color: #555;
+        }
+        .copy-btn.copied {
+            background-color: #28a745;
+        }
+        /* QR Code Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #1e1e1e;
+            padding: 30px;
+            border: 1px solid #333;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 90%;
+            width: 320px;
+            position: relative; /* For close button positioning */
+        }
+        .modal-content img {
+            max-width: 100%;
+            border: 5px solid #fff;
+            border-radius: 5px;
+        }
+        .modal-address {
+            font-family: 'Courier New', Courier, monospace;
+            color: #a0a0a0;
+            word-break: break-all;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: #aaa;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="profile.png" alt="Profile Photo" class="profile-pic">
+
+        <h1>Support My Work</h1>
+        <p>Your support helps me continue my game development journey. Thank you for being a part of it!</p>
+
+        <div class="wallet">
+            <div class="wallet-info">
+                <div class="wallet-name">Bitcoin (BTC)</div>
+                <div class="wallet-address" id="btc-addr">bc1qqkrj7qm8004am9ppjhf0leaaw8fj2hh8p698dn</div>
+            </div>
+            <div class="button-group">
+                <button class="btn qr-btn" onclick="showQrCode('bc1qqkrj7qm8004am9ppjhf0leaaw8fj2hh8p698dn')">QR</button>
+                <button class="btn copy-btn" onclick="copyAddress('btc-addr', this)">Copy</button>
+            </div>
+        </div>
+
+        <div class="wallet">
+            <div class="wallet-info">
+                <div class="wallet-name">Ethereum / USDT (BEP20)</div>
+                <div class="wallet-address" id="eth-addr">0xc94ECA644D313063b60a26b26adc4fFf0C0afC86</div>
+            </div>
+            <div class="button-group">
+                <button class="btn qr-btn" onclick="showQrCode('0xc94ECA644D313063b60a26b26adc4fFf0C0afC86')">QR</button>
+                <button class="btn copy-btn" onclick="copyAddress('eth-addr', this)">Copy</button>
+            </div>
+        </div>
+
+        <div class="wallet">
+            <div class="wallet-info">
+                <div class="wallet-name">USDT (TRC20)</div>
+                <div class="wallet-address" id="usdt-trc-addr">TFBbN5r48Xogqnxd1BhG4VDpQBdiGy9pta</div>
+            </div>
+            <div class="button-group">
+                <button class="btn qr-btn" onclick="showQrCode('TFBbN5r48Xogqnxd1BhG4VDpQBdiGy9pta')">QR</button>
+                <button class="btn copy-btn" onclick="copyAddress('usdt-trc-addr', this)">Copy</button>
+            </div>
+        </div>
+
+        <div class="wallet">
+            <div class="wallet-info">
+                <div class="wallet-name">Solana (SOL)</div>
+                <div class="wallet-address" id="sol-addr">Ag5ojwDiGgQqMq85tMyHQ9ZMqntbpuidA7gr6hcC1TK</div>
+            </div>
+            <div class="button-group">
+                <button class="btn qr-btn" onclick="showQrCode('Ag5ojwDiGgQqMq85tMyHQ9ZMqntbpuidA7gr6hcC1TK')">QR</button>
+                <button class="btn copy-btn" onclick="copyAddress('sol-addr', this)">Copy</button>
+            </div>
+        </div>
+
+        <div class="wallet">
+            <div class="wallet-info">
+                <div class="wallet-name">Ripple (XRP)</div>
+                <div class="wallet-address" id="xrp-addr">rnWxtN3MsiANGnWRHRmq4DVuiDNKqveFKz</div>
+            </div>
+            <div class="button-group">
+                <button class="btn qr-btn" onclick="showQrCode('rnWxtN3MsiANGnWRHRmq4DVuiDNKqveFKz')">QR</button>
+                <button class="btn copy-btn" onclick="copyAddress('xrp-addr', this)">Copy</button>
+            </div>
+        </div>
+
+        <div class="wallet">
+            <div class="wallet-info">
+                <div class="wallet-name">Toncoin (TON)</div>
+                <div class="wallet-address" id="ton-addr">UQBo5yS1sowWzD0lT8064y9Nd7A2Va4ZFpT0zpSWDAk6xMwu</div>
+            </div>
+            <div class="button-group">
+                <button class="btn qr-btn" onclick="showQrCode('UQBo5yS1sowWzD0lT8064y9Nd7A2Va4ZFpT0zpSWDAk6xMwu')">QR</button>
+                <button class="btn copy-btn" onclick="copyAddress('ton-addr', this)">Copy</button>
+            </div>
+        </div>
+
+        <div class="wallet">
+            <div class="wallet-info">
+                <div class="wallet-name">Sui (SUI)</div>
+                <div class="wallet-address" id="sui-addr">0x383060294674f09167681163c419d0794e8e996e2b2a97d161a5ef6405694db5</div>
+            </div>
+            <div class="button-group">
+                <button class="btn qr-btn" onclick="showQrCode('0x383060294674f09167681163c419d0794e8e996e2b2a97d161a5ef6405694db5')">QR</button>
+                <button class="btn copy-btn" onclick="copyAddress('sui-addr', this)">Copy</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="qrModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeBtn">&times;</span>
+            <img id="qrImage" src="" alt="QR Code">
+            <div id="modalAddress" class="modal-address"></div>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('qrModal');
+        const qrImage = document.getElementById('qrImage');
+        const modalAddress = document.getElementById('modalAddress');
+        const closeBtn = document.getElementById('closeBtn');
+
+        function showQrCode(address) {
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(address)}`;
+            qrImage.src = qrApiUrl;
+            modalAddress.innerText = address;
+            modal.style.display = 'flex';
+        }
+
+        function copyAddress(elementId, button) {
+            const address = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(address).then(() => {
+                const originalText = button.innerText;
+                button.innerText = 'Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.innerText = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+        
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+
+</body>
+</html>
